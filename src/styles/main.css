@@ -52,6 +52,10 @@
   --r-l: 22px;
   --pill: 999px;
 
+  /* Room to keep free at the bottom of small screens. */
+  --badge-clearance: 0px;
+  --bottom-inset: max(var(--badge-clearance), env(safe-area-inset-bottom, 0px));
+
   --sidebar-w: 15rem;
   --gutter: clamp(1rem, 3vw, 2.25rem);
   --max: 1120px;
@@ -1478,7 +1482,10 @@ h1:focus {
     z-index: 30;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0;
-    padding: 0.35rem 0.5rem calc(0.35rem + env(safe-area-inset-bottom));
+    /* The tabs sit above whichever is taller: the device's safe area or the
+       hosting badge (--badge-clearance, measured in ui/badgeClearance.js).
+       The bar's background continues underneath; the badge stays untouched. */
+    padding: 0.35rem 0.5rem calc(0.35rem + var(--bottom-inset));
     border-top: 1px solid var(--line);
     background: var(--sidebar-bg);
     backdrop-filter: blur(16px) saturate(1.4);
@@ -1509,11 +1516,11 @@ h1:focus {
   }
 
   .main {
-    padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+    padding-bottom: calc(6rem + var(--bottom-inset));
   }
 
   .toasts {
-    bottom: calc(5rem + env(safe-area-inset-bottom));
+    bottom: calc(5rem + var(--bottom-inset));
   }
 }
 

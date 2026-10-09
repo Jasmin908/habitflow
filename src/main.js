@@ -14,6 +14,7 @@ import { todayKey } from './modules/dates.js';
 import { deleteHabit, getHabit, getState, initStore, reloadFromStorage, setCompletion, subscribe } from './modules/habits.js';
 import { SETTINGS_KEY, applyTheme, loadSettings } from './modules/settings.js';
 import { STORAGE_KEY } from './modules/storage.js';
+import { initBadgeClearance } from './ui/badgeClearance.js';
 import { calendarActions, renderCalendar } from './ui/calendar.js';
 import { dashboardActions, getSelectedDay, renderDashboard } from './ui/dashboard.js';
 import { confirmAction, initHabitDialog, openHabitDialog, toast } from './ui/dialogs.js';
@@ -119,6 +120,7 @@ document.addEventListener('change', (event) => {
 
 /* ---------- Start ---------- */
 hydrateIcons();
+initBadgeClearance();
 initHabitDialog({
   saved: ({ habit, wasEditing }) => toast(wasEditing ? `"${habit.name}" was updated.` : `"${habit.name}" was added.`),
 });
