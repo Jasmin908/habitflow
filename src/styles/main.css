@@ -1,0 +1,1588 @@
+/* ==================================================================
+   HabitFlow styles
+   1. Tokens (dark + light)   2. Base        3. App shell and sidebar
+   4. Page and panels         5. Buttons     6. Stats cards
+   7. Week strip and habits   8. Statistics  9. Calendar
+   10. Settings               11. Dialogs    12. Toasts
+   13. Responsive and motion
+================================================================== */
+
+/* ---------- 1. Tokens ----------
+   Every colour is a token, so the light theme only swaps this block. */
+:root {
+  --bg: #0a0a12;
+  --surface: #13121f;
+  --surface-2: #1a192a;
+  --surface-3: #232238;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.16);
+  --text: #f2f1f8;
+  --text-done: #e6e4f2;
+  --muted: #a5a3ba;
+  --violet: #8b5cf6;
+  --accent-text: #c4b5fd;
+  --accent-bg: rgb(139 92 246 / 0.12);
+  --accent-bg-strong: rgb(139 92 246 / 0.22);
+  --accent-border: rgb(139 92 246 / 0.4);
+  --hover: rgb(255 255 255 / 0.06);
+  --input-bg: #0a0a12;
+  --sidebar-bg: rgb(13 12 22 / 0.85);
+  --panel-bg: rgb(19 18 31 / 0.7);
+  --card-sheen: rgb(255 255 255 / 0.035);
+  --backdrop: rgb(5 5 10 / 0.7);
+  --shadow: 0 2rem 5rem -1rem rgb(0 0 0 / 0.7);
+  --glow-a: rgb(139 92 246 / 0.16);
+  --glow-b: rgb(99 102 241 / 0.1);
+  --danger: #f87171;
+  --danger-bg: rgb(248 113 113 / 0.12);
+  --on-danger: #1c0b0b;
+  --chart-soft: rgb(139 92 246 / 0.45);
+  --chart-grid: rgb(255 255 255 / 0.08);
+  --done-bg: rgb(139 92 246 / 0.08);
+  --done-border: rgb(139 92 246 / 0.3);
+  /* Decorative gradient (check marks, bars) and darker fills that carry white text. */
+  --gradient: linear-gradient(135deg, #a78bfa, #6366f1);
+  --gradient-strong: linear-gradient(135deg, #7c3aed, #4f46e5);
+  --violet-fill: #7c3aed;
+
+  --font: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --r-s: 10px;
+  --r-m: 16px;
+  --r-l: 22px;
+  --pill: 999px;
+
+  --sidebar-w: 15rem;
+  --gutter: clamp(1rem, 3vw, 2.25rem);
+  --max: 1120px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #f6f5fb;
+  --surface: #ffffff;
+  --surface-2: #ffffff;
+  --surface-3: #e9e6f4;
+  --line: rgb(24 18 60 / 0.1);
+  --line-strong: rgb(24 18 60 / 0.2);
+  --text: #171529;
+  --text-done: #2b2840;
+  --muted: #5f5c78;
+  --violet: #7c3aed;
+  --accent-text: #6d28d9;
+  --accent-bg: rgb(124 58 237 / 0.08);
+  --accent-bg-strong: rgb(124 58 237 / 0.16);
+  --accent-border: rgb(124 58 237 / 0.35);
+  --hover: rgb(24 18 60 / 0.05);
+  --input-bg: #ffffff;
+  --sidebar-bg: rgb(255 255 255 / 0.85);
+  --panel-bg: rgb(255 255 255 / 0.75);
+  --card-sheen: transparent;
+  --backdrop: rgb(30 26 60 / 0.35);
+  --shadow: 0 2rem 4rem -1.5rem rgb(40 30 90 / 0.35);
+  --glow-a: rgb(139 92 246 / 0.14);
+  --glow-b: rgb(99 102 241 / 0.08);
+  --danger: #dc2626;
+  --danger-bg: rgb(220 38 38 / 0.08);
+  --on-danger: #ffffff;
+  --chart-soft: rgb(124 58 237 / 0.4);
+  --chart-grid: rgb(24 18 60 / 0.1);
+  --done-bg: rgb(124 58 237 / 0.06);
+  --done-border: rgb(124 58 237 / 0.3);
+  color-scheme: light;
+}
+
+/* ---------- 2. Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(60rem 32rem at 85% -10%, var(--glow-a), transparent 70%),
+    radial-gradient(48rem 30rem at 10% 10%, var(--glow-b), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+fieldset,
+legend {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+fieldset {
+  border: 0;
+  min-width: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+
+/* Headings receive focus after navigation, for screen readers only. */
+h1:focus {
+  outline: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: var(--pill);
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+.noscript {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* ---------- 3. App shell and sidebar ---------- */
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  height: 100vh;
+  padding: 1.5rem 1rem;
+  border-right: 1px solid var(--line);
+  background: var(--sidebar-bg);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  align-self: flex-start;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--r-s);
+  color: var(--text);
+  font-size: 1.125rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.brand__mark {
+  width: 2rem;
+  height: 2rem;
+}
+
+.nav {
+  display: grid;
+  gap: 0.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.nav__link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  border-radius: var(--r-s);
+  color: var(--muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.nav__link:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.nav__link[aria-current='page'] {
+  background: var(--accent-bg-strong);
+  color: var(--text);
+  font-weight: 560;
+}
+
+.nav__link[aria-current='page'] svg {
+  color: var(--accent-text);
+}
+
+/* Marker on the active page, so it is not shown by colour alone. */
+.nav__link[aria-current='page']::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7rem;
+  bottom: 0.7rem;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--violet);
+}
+
+.sidebar__note {
+  margin-top: auto;
+  padding: 1rem 0.75rem 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.main {
+  min-width: 0;
+  padding: clamp(1.5rem, 4vw, 2.75rem) var(--gutter) 4rem;
+}
+
+.view {
+  width: min(100%, var(--max));
+  margin-inline: auto;
+}
+
+/* ---------- 4. Page and panels ---------- */
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  flex-wrap: wrap;
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.page-head h1 {
+  margin-top: 0.25rem;
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  letter-spacing: -0.035em;
+}
+
+.page-sub {
+  max-width: 40rem;
+  margin-top: 0.5rem;
+  color: var(--muted);
+}
+
+.panel {
+  margin-top: clamp(1rem, 2.5vw, 1.5rem);
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--r-l);
+  background: var(--panel-bg);
+}
+
+.panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.panel__head h2,
+.setting h2 {
+  font-size: 1.25rem;
+}
+
+.tracker .panel__head h2 {
+  font-size: 1.5rem;
+}
+
+.panel__sub {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.date-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex: none;
+}
+
+/* ---------- 5. Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1.15rem;
+  border: 1px solid transparent;
+  border-radius: var(--pill);
+  font-weight: 560;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    filter 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn--primary {
+  background: var(--gradient-strong);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  filter: brightness(1.1);
+}
+
+.btn--ghost {
+  border-color: var(--line-strong);
+  background: var(--card-sheen);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.btn--ghost:disabled {
+  opacity: 0.45;
+}
+
+.btn--danger {
+  background: var(--danger);
+  color: var(--on-danger);
+}
+
+.btn--danger:hover {
+  filter: brightness(1.08);
+}
+
+.btn--danger-ghost {
+  border-color: var(--danger);
+  background: none;
+  color: var(--danger);
+}
+
+.btn--danger-ghost:hover {
+  background: var(--danger-bg);
+}
+
+.btn--small {
+  min-height: 2.5rem;
+  padding: 0 0.95rem;
+  font-size: 0.9375rem;
+}
+
+.btn__icon svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  transition:
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.icon-btn:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.icon-btn--danger:hover {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+/* ---------- 6. Stats cards ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.875rem;
+  margin-top: clamp(1.25rem, 3vw, 2rem);
+}
+
+.stat {
+  min-width: 0;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-l);
+  background: linear-gradient(180deg, var(--card-sheen), transparent), var(--surface);
+}
+
+.stat--ring {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.stat__body {
+  min-width: 0;
+}
+
+.stat__label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.stat__icon {
+  flex: none;
+  color: var(--accent-text);
+}
+
+.stat__icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.stat__value {
+  display: flex;
+  align-items: baseline;
+  margin-top: 0.5rem;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat__of {
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  white-space: pre;
+}
+
+.stat__note {
+  margin-top: 0.4rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ring {
+  flex: none;
+  width: 3.5rem;
+  height: 3.5rem;
+  transform: rotate(-90deg);
+}
+
+.ring circle {
+  fill: none;
+  stroke-width: 5;
+}
+
+.ring__track {
+  stroke: var(--surface-3);
+}
+
+.ring__value {
+  stroke: var(--violet);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s var(--ease);
+}
+
+/* ---------- 7. Week strip and habits ---------- */
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.375rem;
+  margin-top: 1.25rem;
+}
+
+.day {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 0 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--r-m);
+  background: none;
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+
+.day:hover {
+  background: var(--hover);
+}
+
+.day[aria-pressed='true'] {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+}
+
+.day__name {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.day.is-today .day__name {
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+/* A ring that fills clockwise with the day's completion (--p in percent).
+   Shared by the week strip and the calendar. */
+.day__ring {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: conic-gradient(var(--violet) calc(var(--p) * 1%), var(--surface-3) 0);
+}
+
+.day__ring span {
+  display: grid;
+  place-items: center;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  border-radius: 50%;
+  background: var(--surface);
+  font-size: 0.875rem;
+  font-weight: 560;
+  font-variant-numeric: tabular-nums;
+}
+
+.day.is-complete .day__ring {
+  background: var(--violet-fill);
+}
+
+.day.is-complete .day__ring span {
+  background: var(--violet-fill);
+  color: #fff;
+}
+
+.day.is-future .day__ring span {
+  color: var(--muted);
+}
+
+.habits {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.habit {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  background: var(--surface-2);
+  transition:
+    border-color 0.2s var(--ease),
+    background-color 0.2s var(--ease);
+}
+
+.habit:hover {
+  border-color: var(--line-strong);
+}
+
+/* Done: marked by the filled check and a violet tint on the whole row.
+   The name keeps its full colour, so it stays easy to read. */
+.habit.is-done {
+  border-color: var(--done-border);
+  background: var(--done-bg);
+}
+
+.habit__check {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  margin: 0;
+  border: 1.5px solid var(--muted);
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+
+.habit__check::after {
+  content: '';
+  width: 0.75rem;
+  height: 0.75rem;
+  background: #fff;
+  clip-path: polygon(8% 52%, 22% 38%, 40% 58%, 78% 16%, 92% 30%, 40% 86%);
+  transform: scale(0);
+  transition: transform 0.25s var(--ease);
+}
+
+.habit__check:hover:not(:disabled) {
+  border-color: var(--accent-text);
+}
+
+.habit__check:checked {
+  border-color: transparent;
+  background: var(--gradient);
+}
+
+.habit__check:checked::after {
+  transform: scale(1);
+}
+
+.habit__check:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.habit__main {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.habit__check:disabled + .habit__main {
+  cursor: default;
+}
+
+.habit__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--accent-border);
+  border-radius: 0.75rem;
+  background: var(--accent-bg);
+  color: var(--accent-text);
+}
+
+.habit__text {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.habit__name {
+  font-weight: 560;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.2s var(--ease);
+}
+
+.habit.is-done .habit__name {
+  color: var(--text-done);
+}
+
+.habit__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.6rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chip {
+  padding: 0.05rem 0.55rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--pill);
+  font-size: 0.75rem;
+}
+
+.habit__streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 560;
+  font-variant-numeric: tabular-nums;
+}
+
+.habit__streak svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  opacity: 0.5;
+}
+
+.habit__streak.is-active {
+  color: var(--accent-text);
+}
+
+.habit__streak.is-active svg {
+  opacity: 1;
+}
+
+.habit__actions {
+  display: flex;
+}
+
+.habit__actions svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding: clamp(2rem, 6vw, 3.5rem) 1.25rem;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-m);
+  text-align: center;
+}
+
+.empty--plain {
+  margin-top: 0;
+  border: 0;
+}
+
+.empty__icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 0.25rem;
+  border: 1px solid var(--accent-border);
+  border-radius: 0.9rem;
+  background: var(--accent-bg);
+  color: var(--accent-text);
+}
+
+.empty h3 {
+  font-size: 1.25rem;
+}
+
+.empty p {
+  max-width: 26rem;
+  color: var(--muted);
+}
+
+.empty .btn {
+  margin-top: 0.75rem;
+}
+
+/* ---------- 8. Statistics ---------- */
+.charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.chart {
+  position: relative;
+  height: 15rem;
+  margin-top: 1.25rem;
+}
+
+.perf-list {
+  display: grid;
+  margin-top: 0.75rem;
+}
+
+.perf {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.875rem;
+  padding-block: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.perf:first-child {
+  border-top: 0;
+}
+
+.perf__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.perf__name {
+  font-weight: 560;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.perf__rate {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.bar {
+  height: 0.5rem;
+  margin-top: 0.5rem;
+  border-radius: var(--pill);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gradient);
+  transition: width 0.6s var(--ease);
+}
+
+.perf__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 1.25rem;
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+/* ---------- 9. Calendar ---------- */
+.calendar-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 0 clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.month {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+  margin-top: 1.25rem;
+}
+
+.month__weekday {
+  padding-bottom: 0.4rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.cell {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--r-s);
+  background: none;
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+
+.cell {
+  position: relative;
+}
+
+/* Three separate signals: hover is a faint fill, the selected day a violet
+   frame, and today a dot under the number (which stays when selected). */
+.cell:not(.cell--blank):hover {
+  background: var(--hover);
+}
+
+.cell[aria-pressed='true'],
+.cell[aria-pressed='true']:hover {
+  border-color: var(--violet);
+  background: var(--accent-bg-strong);
+}
+
+.cell.is-today::after,
+.swatch.is-today::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0.2rem;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: var(--accent-text);
+  transform: translateX(-50%);
+}
+
+.cell.is-today .day__ring span {
+  font-weight: 700;
+}
+
+/* Day states. The legend swatches use the same rules, so they cannot drift apart.
+   complete – solid disc          partial – ring filled as far as the day got
+   missed   – thin red outline    pending – empty grey ring (today, still open)
+   none     – dotted outline      future  – plain number, no ring */
+:is(.cell, .swatch).is-complete .day__ring,
+:is(.cell, .swatch).is-complete .day__ring span {
+  background: var(--violet-fill);
+  color: #fff;
+}
+
+:is(.cell, .swatch).is-missed .day__ring {
+  background: var(--danger);
+}
+
+:is(.cell, .swatch).is-missed .day__ring span {
+  width: calc(100% - 3px);
+  height: calc(100% - 3px);
+  color: var(--danger);
+}
+
+:is(.cell, .swatch).is-none .day__ring {
+  background: none;
+  border: 1.5px dotted var(--muted);
+}
+
+:is(.cell, .swatch).is-none .day__ring span {
+  width: 100%;
+  height: 100%;
+  background: none;
+  color: var(--muted);
+  font-weight: 450;
+}
+
+.cell.is-future .day__ring,
+.cell.is-future .day__ring span {
+  background: none;
+  color: var(--muted);
+  font-weight: 450;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.swatch {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.swatch .day__ring {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.swatch .day__ring span {
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+}
+
+.swatch.is-missed .day__ring span {
+  width: calc(100% - 3px);
+  height: calc(100% - 3px);
+}
+
+.swatch.is-today::after {
+  bottom: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: clamp(1rem, 2.5vw, 1.5rem);
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--accent-border);
+  border-radius: var(--r-m);
+  background: var(--accent-bg);
+  font-size: 0.9375rem;
+}
+
+.notice__icon {
+  flex: none;
+  margin-top: 0.1rem;
+  color: var(--accent-text);
+}
+
+/* ---------- 10. Settings ---------- */
+.settings {
+  max-width: 46rem;
+  margin-top: clamp(0.5rem, 2vw, 1rem);
+}
+
+.setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  flex-wrap: wrap;
+}
+
+.setting > div {
+  flex: 1 1 18rem;
+}
+
+.setting--danger {
+  border-color: var(--danger);
+  border-style: dashed;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-s);
+  background: var(--input-bg);
+}
+
+.segmented label {
+  position: relative;
+}
+
+.segmented span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.25rem;
+  padding-inline: 0.9rem;
+  border-radius: 7px;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition:
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.segmented span svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.segmented input:checked + span {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+/* ---------- 11. Dialogs and form fields ---------- */
+.dialog {
+  width: min(100% - 2rem, 31rem);
+  max-height: min(100dvh - 2rem, 46rem);
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-l);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: dialog-in 0.3s var(--ease);
+}
+
+.dialog::backdrop {
+  background: var(--backdrop);
+  backdrop-filter: blur(4px);
+}
+
+.dialog form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.dialog--small {
+  width: min(100% - 2rem, 26rem);
+}
+
+.dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 0.9rem 0.6rem 1.5rem;
+}
+
+.dialog__head h2,
+.dialog--small h2 {
+  font-size: 1.25rem;
+}
+
+.dialog__body {
+  display: grid;
+  gap: 1.25rem;
+  padding: 0.75rem 1.5rem 1.5rem;
+  overflow-y: auto;
+}
+
+.dialog--small .dialog__body {
+  gap: 0.6rem;
+  padding-top: 1.5rem;
+}
+
+.dialog--small p {
+  color: var(--muted);
+}
+
+.dialog__foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--line);
+  background: var(--card-sheen);
+}
+
+.field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.field > label,
+.field > legend {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.field > legend {
+  margin-bottom: 0.5rem;
+}
+
+.field input[type='text'],
+.field input[type='date'],
+.field select {
+  width: 100%;
+  min-height: 2.875rem;
+  padding: 0 0.9rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-s);
+  background: var(--input-bg);
+  transition: border-color 0.2s var(--ease);
+}
+
+.field input::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.field input:hover,
+.field select:hover {
+  border-color: var(--muted);
+}
+
+.field input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.field__hint {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.field__error {
+  margin-top: 0.5rem;
+  color: var(--danger);
+  font-size: 0.875rem;
+}
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.icon-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.icon-option input,
+.weekday input,
+.segmented input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.icon-option > span:first-of-type {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  border-radius: var(--r-s);
+  background: var(--input-bg);
+  color: var(--muted);
+  transition:
+    border-color 0.2s var(--ease),
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.icon-option:hover > span:first-of-type {
+  color: var(--text);
+}
+
+.icon-option input:checked + span {
+  border-color: var(--violet);
+  background: var(--accent-bg-strong);
+  color: var(--accent-text);
+}
+
+.icon-option input:focus-visible + span,
+.weekday input:focus-visible + span,
+.segmented input:focus-visible + span {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+
+.weekday-picker {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
+
+.weekday {
+  position: relative;
+}
+
+.weekday > span:first-of-type {
+  display: grid;
+  place-items: center;
+  min-height: 2.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-s);
+  background: var(--input-bg);
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition:
+    border-color 0.2s var(--ease),
+    background-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.weekday input:checked + span {
+  border-color: var(--violet);
+  background: var(--accent-bg-strong);
+  color: var(--text);
+}
+
+#schedule-hint {
+  margin-top: 0.6rem;
+}
+
+/* ---------- 12. Toasts ---------- */
+.toasts {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  z-index: 60;
+  display: grid;
+  gap: 0.5rem;
+  width: min(100% - 2rem, 26rem);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.toast {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-m);
+  background: var(--surface-3);
+  font-size: 0.9375rem;
+  box-shadow: var(--shadow);
+  animation: toast-in 0.3s var(--ease);
+}
+
+.toast--error {
+  border-color: var(--danger);
+}
+
+/* ---------- 13. Responsive and motion ---------- */
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@media (max-width: 1180px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .calendar-layout,
+  .charts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Tablet and phone: the sidebar becomes a slim top bar, and the navigation
+   moves to a tab bar at the bottom, where thumbs reach it. */
+@media (max-width: 860px) {
+  .app {
+    display: block;
+  }
+
+  .sidebar {
+    position: sticky;
+    z-index: 20;
+    flex-direction: row;
+    align-items: center;
+    height: 3.75rem;
+    padding: 0 var(--gutter);
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    /* A backdrop filter here would trap the fixed tab bar inside this bar. */
+    background: var(--bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .sidebar__note {
+    display: none;
+  }
+
+  .nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    padding: 0.35rem 0.5rem calc(0.35rem + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  }
+
+  .nav__link {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2rem;
+    min-height: 3.25rem;
+    padding: 0.25rem;
+    font-size: 0.6875rem;
+  }
+
+  .nav__link[aria-current='page'] {
+    background: none;
+    color: var(--accent-text);
+  }
+
+  .nav__link[aria-current='page']::before {
+    top: 0;
+    bottom: auto;
+    left: 30%;
+    right: 30%;
+    width: auto;
+    height: 3px;
+  }
+
+  .main {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+  }
+
+  .toasts {
+    bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 560px) {
+  .stat {
+    padding: 1rem;
+  }
+
+  .stat__label {
+    white-space: normal;
+  }
+
+  /* Too narrow for the ring next to the label; the percentage stays. */
+  .stat--ring .ring {
+    display: none;
+  }
+
+  .panel__head {
+    flex-wrap: wrap;
+  }
+
+  .week {
+    gap: 0.125rem;
+  }
+
+  .day__ring {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  /* Streak and actions move to a second row under the name. */
+  .habit {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    row-gap: 0.25rem;
+    padding: 0.75rem;
+  }
+
+  .habit__streak {
+    grid-column: 2;
+    grid-row: 2;
+    padding-left: 3.375rem;
+  }
+
+  .habit__actions {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    flex-direction: column;
+  }
+
+  .icon-grid {
+    gap: 0.3rem;
+  }
+
+  .dialog__foot .btn,
+  .setting .btn,
+  .setting .segmented {
+    flex: 1;
+  }
+
+  .page-head .btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

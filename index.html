@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0a12" />
+    <title>HabitFlow – Habit tracker with streaks, statistics and a calendar</title>
+    <meta
+      name="description"
+      content="HabitFlow is a free habit tracker that runs in your browser. Build routines, tick off daily habits, and follow your streaks, statistics and calendar. No account; your data stays on your device."
+    />
+    <link rel="canonical" href="%SITE_URL%/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Social sharing. %SITE_URL% is filled in at build time (see vite.config.js). -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="HabitFlow" />
+    <meta property="og:title" content="HabitFlow – Habit tracker" />
+    <meta property="og:description" content="Build routines, tick off daily habits, and follow your streaks, statistics and calendar. Runs in your browser, no account needed." />
+    <meta property="og:url" content="%SITE_URL%/" />
+    <meta property="og:image" content="%SITE_URL%/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="HabitFlow logo with the line: Build routines. Track habits. See progress." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- Apply the saved theme before the first paint, so there is no flash. -->
+    <script>
+      try {
+        if (JSON.parse(localStorage.getItem('habitflow:settings') || '{}').theme === 'light') {
+          document.documentElement.dataset.theme = 'light';
+        }
+      } catch (error) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="app">
+      <aside class="sidebar">
+        <a class="brand" href="#/dashboard" aria-label="HabitFlow, dashboard">
+          <svg class="brand__mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <rect x="1" y="1" width="30" height="30" rx="9" fill="url(#brand-gradient)" />
+            <path d="M9.5 16.5l4.5 4.5 8.5-10" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+            <defs>
+              <linearGradient id="brand-gradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#a78bfa" />
+                <stop offset="1" stop-color="#6366f1" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <span>HabitFlow</span>
+        </a>
+
+        <nav class="nav" aria-label="Main">
+          <a class="nav__link" href="#/dashboard" data-nav="dashboard"><span data-icon="dashboard"></span><span>Dashboard</span></a>
+          <a class="nav__link" href="#/statistics" data-nav="statistics"><span data-icon="statistics"></span><span>Statistics</span></a>
+          <a class="nav__link" href="#/calendar" data-nav="calendar"><span data-icon="calendar"></span><span>Calendar</span></a>
+          <a class="nav__link" href="#/settings" data-nav="settings"><span data-icon="settings"></span><span>Settings</span></a>
+        </nav>
+
+        <p class="sidebar__note">Your data stays in this browser.</p>
+      </aside>
+
+      <main id="main" class="main">
+        <!-- ============ Dashboard ============ -->
+        <section class="view" data-view="dashboard" aria-labelledby="greeting">
+          <header class="page-head">
+            <div>
+              <p class="eyebrow" id="today-date"></p>
+              <h1 id="greeting" tabindex="-1"></h1>
+              <p class="page-sub" id="motivation"></p>
+            </div>
+            <button class="btn btn--primary" type="button" data-action="new-habit">
+              <span class="btn__icon" data-icon="plus"></span>
+              <span>New habit</span>
+            </button>
+          </header>
+
+          <section class="stats" id="stats" aria-label="Overview"></section>
+
+          <section class="panel tracker" aria-labelledby="tracker-title">
+            <header class="panel__head">
+              <div>
+                <h2 id="tracker-title"></h2>
+                <p class="panel__sub" id="tracker-sub"></p>
+              </div>
+              <div class="date-nav" role="group" aria-label="Change day">
+                <button class="icon-btn" type="button" data-action="prev-day" aria-label="Previous day">
+                  <span data-icon="chevronLeft"></span>
+                </button>
+                <button class="btn btn--ghost btn--small" type="button" data-action="today">Today</button>
+                <button class="icon-btn" type="button" data-action="next-day" aria-label="Next day">
+                  <span data-icon="chevronRight"></span>
+                </button>
+              </div>
+            </header>
+
+            <div class="week" id="week" role="group" aria-label="Days of this week"></div>
+            <div id="habit-list"></div>
+          </section>
+        </section>
+
+        <!-- ============ Statistics ============ -->
+        <section class="view" data-view="statistics" aria-labelledby="statistics-title" hidden>
+          <header class="page-head">
+            <div>
+              <h1 id="statistics-title" tabindex="-1">Statistics</h1>
+              <p class="page-sub">See how consistently you're keeping up with your habits. Only the days a habit was planned for count, so rest days never pull your numbers down.</p>
+            </div>
+          </header>
+          <div id="statistics-content"></div>
+        </section>
+
+        <!-- ============ Calendar ============ -->
+        <section class="view" data-view="calendar" aria-labelledby="calendar-title" hidden>
+          <header class="page-head">
+            <div>
+              <h1 id="calendar-title" tabindex="-1">Calendar</h1>
+              <p class="page-sub">Pick a day to see its habits. Past days can still be corrected.</p>
+            </div>
+          </header>
+
+          <div class="calendar-layout">
+            <section class="panel" aria-labelledby="calendar-month">
+              <header class="panel__head">
+                <h2 id="calendar-month" aria-live="polite"></h2>
+                <div class="date-nav" role="group" aria-label="Change month">
+                  <button class="icon-btn" type="button" data-action="cal-prev" aria-label="Previous month">
+                    <span data-icon="chevronLeft"></span>
+                  </button>
+                  <button class="btn btn--ghost btn--small" type="button" data-action="cal-today">Today</button>
+                  <button class="icon-btn" type="button" data-action="cal-next" aria-label="Next month">
+                    <span data-icon="chevronRight"></span>
+                  </button>
+                </div>
+              </header>
+              <div class="month" id="calendar-grid"></div>
+              <!-- The swatches reuse the calendar's own day styles, so they always match. -->
+              <ul class="legend" aria-label="Legend">
+                <li><span class="swatch is-complete"><span class="day__ring" style="--p: 100"><span></span></span></span>All done</li>
+                <li><span class="swatch is-partial"><span class="day__ring" style="--p: 50"><span></span></span></span>Partly done</li>
+                <li><span class="swatch is-missed"><span class="day__ring" style="--p: 0"><span></span></span></span>Missed</li>
+                <li><span class="swatch is-pending"><span class="day__ring" style="--p: 0"><span></span></span></span>Still open today</li>
+                <li><span class="swatch is-none"><span class="day__ring" style="--p: 0"><span></span></span></span>Nothing scheduled</li>
+                <li><span class="swatch is-today"></span>Today</li>
+              </ul>
+            </section>
+
+            <section class="panel" aria-labelledby="calendar-day-title">
+              <header class="panel__head">
+                <div>
+                  <h2 id="calendar-day-title"></h2>
+                  <p class="panel__sub" id="calendar-day-sub"></p>
+                </div>
+              </header>
+              <div id="calendar-day-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <!-- ============ Settings ============ -->
+        <section class="view" data-view="settings" aria-labelledby="settings-title" hidden>
+          <header class="page-head">
+            <div>
+              <h1 id="settings-title" tabindex="-1">Settings</h1>
+              <p class="page-sub">Appearance and your data. Everything is stored in this browser only.</p>
+            </div>
+          </header>
+
+          <div class="settings">
+            <section class="panel setting" aria-labelledby="appearance-title">
+              <div>
+                <h2 id="appearance-title">Appearance</h2>
+                <p class="panel__sub">Choose how HabitFlow looks. Your choice is remembered on this device.</p>
+              </div>
+              <fieldset class="segmented segmented--icons" id="theme-control">
+                <legend class="visually-hidden">Theme</legend>
+                <label><input type="radio" name="theme" value="dark" /><span><i data-icon="moon"></i>Dark</span></label>
+                <label><input type="radio" name="theme" value="light" /><span><i data-icon="sun"></i>Light</span></label>
+              </fieldset>
+            </section>
+
+            <section class="panel setting" aria-labelledby="export-title">
+              <div>
+                <h2 id="export-title">Export data</h2>
+                <p class="panel__sub" id="data-summary"></p>
+              </div>
+              <button class="btn btn--ghost" type="button" data-action="export-data">
+                <span class="btn__icon" data-icon="download"></span><span>Export as JSON</span>
+              </button>
+            </section>
+
+            <section class="panel setting" aria-labelledby="import-title">
+              <div>
+                <h2 id="import-title">Import data</h2>
+                <p class="panel__sub">Load a file exported from HabitFlow. It replaces the habits and history currently stored here; you will be asked to confirm first.</p>
+                <p class="field__error" id="import-error" role="alert" hidden></p>
+              </div>
+              <button class="btn btn--ghost" type="button" data-action="import-data">
+                <span class="btn__icon" data-icon="upload"></span><span>Import JSON file</span>
+              </button>
+              <input class="visually-hidden" type="file" id="import-file" accept="application/json,.json" tabindex="-1" aria-hidden="true" />
+            </section>
+
+            <section class="panel setting setting--danger" aria-labelledby="reset-title">
+              <div>
+                <h2 id="reset-title">Reset all data</h2>
+                <p class="panel__sub">Permanently delete every habit and the whole completion history from this browser. Consider exporting first.</p>
+              </div>
+              <button class="btn btn--danger-ghost" type="button" data-action="reset-data">
+                <span class="btn__icon" data-icon="trash"></span><span>Reset everything</span>
+              </button>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Create / edit habit -->
+    <dialog class="dialog" id="habit-dialog" aria-labelledby="habit-dialog-title">
+      <form id="habit-form" novalidate>
+        <header class="dialog__head">
+          <h2 id="habit-dialog-title">New habit</h2>
+          <button class="icon-btn" type="button" data-close aria-label="Close">
+            <span data-icon="close"></span>
+          </button>
+        </header>
+
+        <div class="dialog__body">
+          <div class="field">
+            <label for="habit-name">Name</label>
+            <input
+              id="habit-name"
+              name="name"
+              type="text"
+              maxlength="60"
+              autocomplete="off"
+              placeholder="e.g. Read 20 pages"
+              aria-describedby="habit-name-error"
+              required
+            />
+            <p class="field__error" id="habit-name-error" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="habit-category">Category</label>
+            <select id="habit-category" name="category"></select>
+          </div>
+
+          <fieldset class="field">
+            <legend>Icon</legend>
+            <div class="icon-grid" id="icon-grid"></div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend>Repeat</legend>
+            <div class="segmented">
+              <label><input type="radio" name="scheduleType" value="daily" checked /><span>Every day</span></label>
+              <label><input type="radio" name="scheduleType" value="weekdays" /><span>Selected days</span></label>
+            </div>
+            <div class="weekday-picker" id="weekday-picker" role="group" aria-label="Days of the week" hidden></div>
+            <p class="field__hint" id="schedule-hint" hidden>A changed schedule applies from today. Earlier days keep the schedule they had.</p>
+            <p class="field__error" id="schedule-error" hidden></p>
+          </fieldset>
+
+          <div class="field">
+            <label for="habit-start">Start date</label>
+            <input id="habit-start" name="startDate" type="date" aria-describedby="habit-start-hint habit-start-error" required />
+            <p class="field__hint" id="habit-start-hint">Days before the start date are not counted.</p>
+            <p class="field__error" id="habit-start-error" hidden></p>
+          </div>
+        </div>
+
+        <footer class="dialog__foot">
+          <button class="btn btn--ghost" type="button" data-close>Cancel</button>
+          <button class="btn btn--primary" type="submit" id="habit-submit">Create habit</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <!-- Confirmation -->
+    <dialog class="dialog dialog--small" id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+      <div class="dialog__body">
+        <h2 id="confirm-title"></h2>
+        <p id="confirm-text"></p>
+      </div>
+      <footer class="dialog__foot">
+        <button class="btn btn--ghost" type="button" data-confirm="no">Cancel</button>
+        <button class="btn btn--danger" type="button" data-confirm="yes">Delete</button>
+      </footer>
+    </dialog>
+
+    <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+    <noscript><p class="noscript">HabitFlow needs JavaScript to run.</p></noscript>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

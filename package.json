@@ -1,0 +1,31 @@
+{
+  "name": "habitflow",
+  "version": "2.1.0",
+  "description": "A habit tracker that runs entirely in the browser: daily tracking, streaks, statistics and a calendar, with data stored in localStorage.",
+  "private": true,
+  "type": "module",
+  "keywords": [
+    "habit-tracker",
+    "productivity",
+    "vanilla-js",
+    "vite",
+    "localstorage",
+    "chartjs"
+  ],
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "vite": "^8.3.4"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
+    "chart.js": "^4.5.1"
+  }
+}
